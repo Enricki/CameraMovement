@@ -8,7 +8,7 @@ public class Pool : MonoBehaviour
     public float ItemHight;
     public Item ItemPrefab;
     List<GameObject> Items = new List<GameObject>();
-    GeneratedMesh generatedMesh;
+    public GeneratedMesh generatedMesh;
     Vector3 spawnPosition;
     float itemDistance;
 
@@ -39,6 +39,6 @@ public class Pool : MonoBehaviour
         Items[i].transform.parent = this.transform;
         Items[i].transform.position = spawnPosition;
         Items[i].name = "Item " + i;
-        spawnPosition.x += generatedMesh.GetComponent<MeshFilter>().mesh.bounds.size.x / poolSize;
+        spawnPosition.x += itemDistance / poolSize;
     }
 }

@@ -11,7 +11,7 @@ public class GeneratedMesh : MonoBehaviour
     [HideInInspector]
     public Vector3 CenterPoint;
     [HideInInspector]
-    public Vector3 LocalCenterPoint;
+    public Vector3 boundSize;
 
     Vector3 scaleFactor
     {
@@ -75,6 +75,7 @@ public class GeneratedMesh : MonoBehaviour
 
         this.GetComponent<MeshCollider>().sharedMesh = mesh;
         mesh.RecalculateNormals();
-        CenterPoint = this.GetComponent<MeshFilter>().mesh.bounds.size / 2;
+        boundSize = this.GetComponent<MeshFilter>().mesh.bounds.size;
+        CenterPoint = boundSize / 2;
     }
 }
