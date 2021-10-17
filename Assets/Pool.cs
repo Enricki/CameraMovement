@@ -7,7 +7,8 @@ public class Pool : MonoBehaviour
     public int poolSize;
     public float ItemHight;
     public Item ItemPrefab;
-    List<GameObject> Items = new List<GameObject>();
+    public Item selectedItem;
+    List<Item> Items = new List<Item>();
     public GeneratedMesh generatedMesh;
     Vector3 spawnPosition;
     float itemDistance;
@@ -35,10 +36,25 @@ public class Pool : MonoBehaviour
 
     private void SpawnItems(int i)
     {
-        Items.Add(Instantiate(ItemPrefab).gameObject);
+        Items.Add(Instantiate(ItemPrefab));
         Items[i].transform.parent = this.transform;
         Items[i].transform.position = spawnPosition;
         Items[i].name = "Item " + i;
         spawnPosition.x += itemDistance / poolSize;
     }
+
+    public void OnItemSelected(Item item)
+    {
+        if (selectedItem != null)
+        {
+            selectedItem.material.SetMaterialProps(selectedItem.defaultColor, 0, 0.5f);
+            selectedItem.Deselect();
+        }
+        selectedItem = item;
+
+        selectedItem.Select();
+        selectedItem.material.SetMaterialProps(selectedItem.defaultColor, 1, 0.5f);
+        Debug.Log(selectedItem.name);
+    }
+
 }
