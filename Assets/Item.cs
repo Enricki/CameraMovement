@@ -12,10 +12,19 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
     public UnityEvent onItemSelected;
     public UnityEvent onItemDeselected;
+    public bool selected = false;
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        parentPool.OnItemSelected(this);
+        if (selected)
+        {
+            parentPool.OnItemDeselected(this);
+        }
+        else
+        {
+            parentPool.OnItemSelected(this);
+        }
+        
     }
 
     public void Select()
@@ -23,6 +32,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
         if (onItemSelected != null)
         {
             onItemSelected.Invoke();
+            selected = true;
         }
     }
 
@@ -31,6 +41,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
         if (onItemDeselected != null)
         {
             onItemDeselected.Invoke();
+            selected = false;
         }
     }
 
@@ -46,7 +57,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
     private void Start()
     {
         parentPool = this.GetComponentInParent<Pool>();
-        Debug.Log(parentPool);
     }
 
 

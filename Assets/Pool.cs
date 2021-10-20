@@ -4,20 +4,27 @@ using UnityEngine;
 
 public class Pool : MonoBehaviour
 {
-    public int poolSize;
-    public float ItemHight;
-    public Item ItemPrefab;
-    public Item selectedItem;
-    List<Item> Items = new List<Item>();
-    public GeneratedMesh generatedMesh;
-    Vector3 spawnPosition;
-    float itemDistance;
+    [SerializeField]
+    private int poolSize;
+    [SerializeField]
+    private float ItemHight;
+    [SerializeField]
+    private Item ItemPrefab;
+    [SerializeField]
+    private CameraController Camera;
 
+    public Item selectedItem;
+    private GeneratedMesh generatedMesh;
+    private List<Item> Items = new List<Item>();
+    private Vector3 spawnPosition;
+    private float itemDistance;
+    [SerializeField]
+    
 
 
     private void Start()
     {
-
+        selectedItem = null;
         generatedMesh = this.GetComponent<GeneratedMesh>();
 
         generatedMesh.GenerateMesh(1);
@@ -45,16 +52,25 @@ public class Pool : MonoBehaviour
 
     public void OnItemSelected(Item item)
     {
+        OnItemDeselected(item);
+        selectedItem = item;
+        selectedItem.Select();
+        selectedItem.material.SetMaterialProps(selectedItem.defaultColor, 1, 0.5f);
+        Camera.ZoomingCamera(selectedItem.transform.position.x, -30, 175, -50);
+        Camera.CanMove = false;
+        Debug.Log(selectedItem.name);
+
+    }
+
+    public void OnItemDeselected(Item item)
+    {
         if (selectedItem != null)
         {
             selectedItem.material.SetMaterialProps(selectedItem.defaultColor, 0, 0.5f);
+            Camera.ZoomingCamera(selectedItem.transform.position.x, 0, 0, 0);
             selectedItem.Deselect();
+            Camera.CanMove = true;
         }
-        selectedItem = item;
-
-        selectedItem.Select();
-        selectedItem.material.SetMaterialProps(selectedItem.defaultColor, 1, 0.5f);
-        Debug.Log(selectedItem.name);
     }
 
 }
