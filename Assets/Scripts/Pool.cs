@@ -12,29 +12,37 @@ public class Pool : MonoBehaviour
     private Item ItemPrefab;
     [SerializeField]
     private CameraController Camera;
+    [SerializeField]
+    private ExpandableUI expandableSlider;
 
     public Item selectedItem;
     private GeneratedMesh generatedMesh;
+    private ExpandableObject expandablePool; 
+
     private List<Item> Items = new List<Item>();
     private Vector3 spawnPosition;
     private float itemDistance;
-    [SerializeField]
     
 
 
     private void Start()
     {
+        expandablePool = this.GetComponent<ExpandableObject>();
+        
+
+        expandablePool.Expand(poolSize);
+        expandableSlider.Expand(poolSize);
+        spawnPosition = new Vector3(expandablePool.CenterPoint.x, ItemHight, 0);
+        itemDistance = expandablePool.boundSize.x * poolSize;
+        Camera.RightBound = itemDistance;
+
+        //        generatedMesh = this.GetComponent<GeneratedMesh>();
+        //        generatedMesh.GenerateMesh(1);
+        //        spawnPosition = generatedMesh.CenterPoint;
+        //        generatedMesh.GenerateMesh(poolSize);
+        //        itemDistance = generatedMesh.GetComponent<MeshFilter>().mesh.bounds.size.x;
+
         selectedItem = null;
-        generatedMesh = this.GetComponent<GeneratedMesh>();
-
-        generatedMesh.GenerateMesh(1);
-        spawnPosition = generatedMesh.CenterPoint;
-        spawnPosition.y = ItemHight;
-
-        generatedMesh.GenerateMesh(poolSize);
-
-        itemDistance = generatedMesh.GetComponent<MeshFilter>().mesh.bounds.size.x;
-
         for (int i = 0; i < poolSize; i ++)
         {
             SpawnItems(i);

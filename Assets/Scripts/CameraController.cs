@@ -43,31 +43,52 @@ public class CameraController : MonoBehaviour
         //}
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            if (CanMove)
-            {
-                if (newPosition.x >= LeftBound)
-                {
-                    newPosition += (transform.right * -movementSpeed);
-                }
-            }
+            SetMoveDirection(true);
         }
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            if (CanMove)
-            {
-                if (newPosition.x <= RightBound)
-                {
-                    newPosition += (transform.right * movementSpeed);
-                }
-
-            }
+            SetMoveDirection(false);
         }
+
+        if (Input.GetMouseButton(0) && Input.mousePosition.x >= Screen.width / 2)
+        {
+            SetMoveDirection(false);
+        }
+        else if (Input.GetMouseButton(0) && Input.mousePosition.x <= Screen.width / 2)
+        {
+            SetMoveDirection(true);
+        }
+
 
         transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
         transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * rotatationSpeed);
     }
-    
 
+    private void SetMoveDirection(bool right)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (!Physics.Raycast(ray, out hit))
+        {
+            if (CanMove)
+            {
+                if (right)
+                {
+                    if (newPosition.x >= LeftBound)
+                    {
+                        newPosition += (transform.right * -movementSpeed);
+                    }
+                }
+                else
+                {
+                    if (newPosition.x <= RightBound)
+                    {
+                        newPosition += (transform.right * movementSpeed);
+                    }
+                }
+            }
+        }
+    }
     public void ZoomingCamera(float xPos, float yPos, float zPos, float angle)
     {
         newPosition = new Vector3(xPos, yPos, zPos);
